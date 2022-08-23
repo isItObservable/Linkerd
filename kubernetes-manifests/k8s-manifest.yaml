@@ -538,7 +538,7 @@ spec:
               args: ["-u", "50", "-d", "48h"]
               env:
                 - name: FRONTEND_ADDR
-                  value: "linkerd.34.159.144.147.nip.io"
+                  value: "linkerd.IP_TO_REPLACE.nip.io"
                 - name: K6_PROMETHEUS_REMOTE_URL
                   value: http://PROM_SVC_TO_REPLACE.default.svc.cluster.local:9090/api/v1/write
                 - name: OTLP_SERVICE_ADDR
