@@ -47,8 +47,10 @@ spec:
 
     exporters:
       logging:
+        loglevel: debug
+
       otlp:
-        endpoint: "http://linkedcollector-collector.default.svc.cluster.local:4317"
+        endpoint: linkedcollector-collector.default.svc.cluster.local:4317
         tls:
           insecure: true
 
@@ -57,7 +59,7 @@ spec:
         traces:
           receivers: [otlp]
           processors: [memory_limiter,batch]
-          exporters: [otlp]
+          exporters: [otlp,logging]
         metrics:
           receivers: [otlp]
           processors: [memory_limiter,metricstransform,batch]
