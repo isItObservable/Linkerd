@@ -1,0 +1,91 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: linkedcollector
+  annotations:
+    linkerd.io/inject: enabled
+spec:
+  image: otel/opentelemetry-collector-contrib-dev:latest
+  serviceAccount: otelcontribcol
+  mode: daemonset
+  hostNetwork: false
+  ports:
+    - name: metric
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      batch:
+        send_batch_max_size: 1000
+        timeout: 30s
+        send_batch_size : 800
+
+      memory_limiter:
+         check_interval: 1s
+         limit_percentage: 70
+         spike_limit_percentage: 30
+
+
+      resourcedetection/gce:
+        detectors: [env, gce]
+        timeout: 2s
+        override: true
+
+      k8sattributes:
+        auth_type: serviceAccount
+        passthrough: false
+        filter:
+          node_from_env_var: K8S_NODE_NAME
+        extract:
+          metadata:
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.deployment.name
+            - k8s.namespace.name
+            - k8s.node.name
+            - k8s.pod.start_time
+
+    exporters:
+
+
+      logging:
+        loglevel: debug
+
+      otlphttp:
+        endpoint: "https://TENANTURL_TOREPLACE/api/v2/otlp"
+        headers: {"Authorization": "Api-Token DT_API_TOKEN_TO_REPLACE"}
+      dynatrace:
+        # optional - Dimensions specified here will be included as a dimension on every exported metric
+        #            unless that metric already has a dimension with the same key.
+        # optional - prefix will be prepended to each metric name in prefix.name format
+        prefix: otpsidecar
+        endpoint: "https://TENANTURL_TOREPLACE/api/v2/metrics/ingest"
+        # Token must at least have the Ingest metrics (metrics.ingest) permission
+        api_token: "DT_API_TOKEN_TO_REPLACE"
+    extensions:
+      memory_ballast:
+        size_in_percentage: 20
+
+
+    service:
+      extensions: [memory_ballast]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter,k8sattributes,batch]
+          exporters: [otlphttp]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter,k8sattributes,resourcedetection/gce,batch]
+          exporters: [dynatrace]
