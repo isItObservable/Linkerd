@@ -326,7 +326,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host :  "linkerd.34.159.144.147.nip.io"
+    - host :  "linkerd.IP_TO_REPLACE.nip.io"
       http:
         paths:
           - pathType: ImplementationSpecific
@@ -572,9 +572,9 @@ spec:
               args: ["-u", "70", "-d", "59m"]
               env:
                 - name: FRONTEND_ADDR
-                  value: "linkerd.34.159.144.147.nip.io"
+                  value: "linkerd.IP_TO_REPLACE.nip.io"
                 - name: K6_PROMETHEUS_REMOTE_URL
-                  value: http://prometheus-kube-prometheus-prometheus.default.svc.cluster.local:9090/api/v1/write
+                  value: http://PROM_SVC_TO_REPLACE.default.svc.cluster.local:9090/api/v1/write
                 - name: OTLP_SERVICE_ADDR
                   value: "localhost:4317"
               resources:
