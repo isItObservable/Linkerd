@@ -1,0 +1,32 @@
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: frontend.hipster-shop.svc.cluster.local
+  namespace: hipster-shop
+spec:
+  routes:
+    - condition:
+        method: GET
+        pathRegex: /
+      name: GET /
+      timeout: 300ms
+    - condition:
+        method: POST
+        pathRegex: /carts
+      name: POST /carts
+    - condition:
+        method: GET
+        pathRegex: /products/\w+
+      name: GET /products/{id}
+    - condition:
+        method: POST
+        pathRegex:  /setcurrency
+      name: POST  /setcurrency
+    - condition:
+        method: GET
+        pathRegex: /carts
+      name: GET /carts
+    - condition:
+        method: POST
+        pathRegex: POST /cart/checkout
+      name: POST /cart/checkout

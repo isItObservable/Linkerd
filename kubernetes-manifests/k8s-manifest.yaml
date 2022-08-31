@@ -14,6 +14,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -78,6 +82,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       containers:
         - name: server
@@ -155,6 +163,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       # imagePullsecrets required for perform2019????
@@ -226,6 +238,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       containers:
         - name: server
@@ -310,7 +326,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host :  "linkerd.IP_TO_REPLACE.nip.io"
+    - host :  "linkerd.34.159.144.147.nip.io"
       http:
         paths:
           - pathType: ImplementationSpecific
@@ -337,6 +353,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -350,6 +370,8 @@ spec:
               value: "localhost"
             - name: OTLP_PORT
               value: "4317"
+            - name: OTLP_SERVICENAME
+              value: "paymentservice"
             - name: PORT
               value: "50051"
           readinessProbe:
@@ -395,6 +417,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -462,6 +488,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -528,19 +558,23 @@ spec:
             product: k6
           annotations:
             sidecar.opentelemetry.io/inject: "true"
+            metrics.dynatrace.com/scrape: 'true'
+            metrics.dynatrace.com/path: '/metrics'
+            metrics.dynatrace.com/port: '4191'
+            metrics.dynatrace.com/secure: 'false'
         spec:
           terminationGracePeriodSeconds: 5
           restartPolicy: OnFailure
           containers:
             - name: k6loadotel
-              image: hrexed/k6-prometheus-otlp:0.1
+              image: hrexed/k6-prometheus-otlp:0.2
               imagePullPolicy: Always
-              args: ["-u", "50", "-d", "48h"]
+              args: ["-u", "70", "-d", "59m"]
               env:
                 - name: FRONTEND_ADDR
-                  value: "linkerd.IP_TO_REPLACE.nip.io"
+                  value: "linkerd.34.159.144.147.nip.io"
                 - name: K6_PROMETHEUS_REMOTE_URL
-                  value: http://PROM_SVC_TO_REPLACE.default.svc.cluster.local:9090/api/v1/write
+                  value: http://prometheus-kube-prometheus-prometheus.default.svc.cluster.local:9090/api/v1/write
                 - name: OTLP_SERVICE_ADDR
                   value: "localhost:4317"
               resources:
@@ -567,6 +601,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -581,6 +619,8 @@ spec:
               value: "localhost"
             - name: OTLP_PORT
               value: "4317"
+            - name: OTLP_SERVICENAME
+              value: "currencyservice"
             - name: PORT
               value: "7000"
           # - name: DISABLE_TRACING
@@ -632,6 +672,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       containers:
         - name: server
@@ -696,6 +740,11 @@ spec:
       labels:
         app: redis-cart
         product: hipster-shop
+      annotations:
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       containers:
         - name: redis
@@ -753,6 +802,10 @@ spec:
         product: hipster-shop
       annotations:
         sidecar.opentelemetry.io/inject: "true"
+        metrics.dynatrace.com/scrape: 'true'
+        metrics.dynatrace.com/path: '/metrics'
+        metrics.dynatrace.com/port: '4191'
+        metrics.dynatrace.com/secure: 'false'
     spec:
       terminationGracePeriodSeconds: 5
       containers:
@@ -763,9 +816,11 @@ spec:
             - containerPort: 9555
           env:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "http://localhost:4317"
+              value: "localhost:4317"
             - name: OTEL_TRACES_EXPORTER
               value: "otlp"
+            - name: OTEL_SERVICE_NAME
+              value: "adservice"
             - name: PORT
               value: "9555"
           # - name: DISABLE_STATS

@@ -6,6 +6,7 @@ metadata:
     linkerd.io/inject: enabled
 spec:
   mode: sidecar
+  hostNetwork: true
   env:
     - name: K8S_NODE_NAME
       valueFrom:
