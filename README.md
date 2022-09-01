@@ -293,6 +293,10 @@ To check that your cluster is ready to install Linkerd, run:
 ```
 linkerd check --pre
 ```
+#### Install the Linkerd CRDs
+```
+linkerd install --crds | kubectl apply -f -
+```
 #### Install the control plane onto your cluster
 ```
 linkerd install | kubectl apply -f -
