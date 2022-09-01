@@ -238,7 +238,7 @@ PROM_SVC_NAME=$(kubectl get svc -l  app.kubernetes.io/instance=prometheus,app=ku
 ```
 update the hispter-shop deployment file :
 ```
-sed -i 's,PROM_SVC_TO_REPLACE,$PROM_SVC_NAME,' kubernetes-manifests/k8s-manifest.yaml
+sed -i "s,PROM_SVC_TO_REPLACE,$PROM_SVC_NAME," kubernetes-manifests/k8s-manifest.yaml
 ```
 
 ### 6.Deploy OpenTelemetry Operator
